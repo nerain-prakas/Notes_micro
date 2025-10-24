@@ -1,0 +1,33 @@
+<div class="note-editor">
+  <h2>{{note.id ? 'Edit Note' : 'New Note'}}</h2>
+  
+  <form ng-submit="save()">
+    <div class="form-group">
+      <input type="text" 
+             ng-model="note.title" 
+             placeholder="Title" 
+             maxlength="100" 
+             required>
+    </div>
+    
+    <div class="form-group">
+      <textarea ng-model="note.content" 
+                placeholder="Note content..." 
+                rows="6"></textarea>
+    </div>
+    
+    <div class="color-picker">
+      <div ng-repeat="color in colors" 
+           class="color-option" 
+           ng-class="{'selected': note.color === color}"
+           ng-style="{'background-color': color}"
+           ng-click="selectColor(color)">
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button type="button" ng-click="cancel()">Cancel</button>
+      <button type="submit">Save</button>
+    </div>
+  </form>
+</div>

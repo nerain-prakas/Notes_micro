@@ -1,0 +1,12 @@
+<div class="notes-grid">
+  <div ng-if="!notes.length" class="empty-state">
+    <h2>No notes found</h2>
+    <p>Create your first note by clicking the "New Note" button</p>
+  </div>
+  <note-card ng-repeat="note in notes | filter:filterNotes | orderBy:sortOption"
+             note="note"
+             on-delete="deleteNote(id)"
+             on-pin="togglePin(id)"
+             on-favorite="toggleFavorite(id)">
+  </note-card>
+</div>

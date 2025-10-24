@@ -1,0 +1,14 @@
+{
+  "name": "angularjs-notes-micro-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx http-server -c-1 -p 5173 .",
+    "build": "mkdir -p dist && cp -r index.html styles components controllers services assets dist && cp -r node_modules/angular/angular.min.js node_modules/angular-route/angular-route.min.js node_modules/angular-animate/angular-animate.min.js dist && cp index.html dist/index.html",
+    "format": "npx prettier --write \"**/*.{js,css,html,json,md}\""
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "prettier": "^3.3.3"
+  }
+}

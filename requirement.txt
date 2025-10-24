@@ -1,0 +1,245 @@
+Scope:
+
+Single‑page app using AngularJS 1.8.x with MVC structure: modules, controllers, services, directives, and routes.
+
+Features:
+
+Create, edit, delete notes.
+
+Fields per note: id, title, content, color (from preset palette), pinned (boolean), favorite (boolean), createdAt, updatedAt.
+
+Sticky‑note card UI: masonry‑like responsive grid, soft shadows, rounded corners, color themes.
+
+Pin/favorite toggles on each card; pinned notes appear first, then favorites, then others.
+
+Instant search filter (search by title and content); shows “No results” empty state.
+
+Sort selector: Updated (desc), Created (desc), Title (asc).
+
+Minimal modal or inline editor for creating/editing notes with validation (title required, max 100 chars).
+
+Keyboard: “n” to add new note, “/” to focus search, “Esc” to close dialogs.
+
+Persist to localStorage via a NotesService; expose methods: list, get(id), create, update, remove, togglePin, toggleFavorite, seedDemo().
+
+Light/dark theme toggle (persist preference).
+
+Architecture:
+
+Angular module: app
+
+Components:
+
+app-shell (header with search, sort, theme switch; router outlet)
+
+notes-list (grid, empty state, card actions)
+
+note-card directive (isolated scope for a single note; emits edit/delete/toggle events)
+
+note-editor (modal or panel form; two‑way bindings for title/content/color; form validation)
+
+Routing (ngRoute):
+
+“/” -> notes-list
+
+“/note/:id” -> editor view for deep linking (optional)
+
+UI/UX:
+
+Clean, mobile‑first UI with large tap targets.
+
+8‑color palette chips for note background; auto‑adapt readable text color.
+
+Smooth 150–200ms transitions for hover/focus.
+
+Accessible labels, focus rings, aria‑attributes, and semantic HTML.
+
+Tech:
+
+Use plain AngularJS 1.8.x (CDN ok) + ngRoute + ngAnimate (optional).
+
+No backend; all storage in localStorage.
+
+Include a simple build script (npm scripts) to serve static files (e.g., http-server or lite-server).
+
+Files:
+
+index.html (load Angular 1.8.x, ngRoute; app shell)
+
+app.module.js
+
+app.routes.js
+
+services/notes.service.js (localStorage CRUD; produce stable ids)
+
+controllers/notes.controller.js (list/search/sort/pin/favorite)
+
+components/note-card.directive.js
+
+components/note-editor.controller.js (or note-editor.directive.js)
+
+styles/main.css (CSS variables for theme; responsive grid)
+
+assets/icons (SVG for pin, star, edit, delete, search, theme)
+
+README.md with setup, run, and deploy steps
+
+Behavior details:
+
+Search should filter in memory; debounce 150ms.
+
+Pinned notes must sort to the top; within groups, apply chosen sort.
+
+Favorite is a separate boolean; show a small star on the card.
+
+When editing, updatedAt changes; createdAt stays stable.
+
+Seed 6 demo notes on first load if storage empty.
+
+Testing (optional):
+
+Add 3–4 unit tests for NotesService (create/update/remove/sort).
+
+Deployment:
+
+Provide GitHub Actions workflow to build and publish to GitHub Pages (or any static host).
+
+Produce a dist/ with minified CSS/JS (can be a simple copy for SPA).
+
+Developer experience:
+
+Prettier config for formatting.
+
+npm scripts: start (serve), build (copy/minify), test (if added), format.
+
+.editorconfig, .gitignore.
+
+Deliverables:
+
+Working SPA with the described UX and keyboard shortcuts.
+
+Clean, commented code.
+
+README with:
+
+Quick start (npm install, npm run start)
+
+Build and deploy steps (GitHub Pages)
+
+Architecture overview
+
+How to enable dark mode, seed data, and reset storage.
+
+Please generate all files with reasonable defaults and sample CSS for a premium feel.
+
+Suggested minimal package.json (drop in project root)
+{
+"name": "angularjs-notes-micro-app",
+"version": "1.0.0",
+"private": true,
+"scripts": {
+"start": "npx http-server -c-1 -p 5173 .",
+"build": "mkdir -p dist && cp -r index.html styles components controllers services assets dist && cp -r node_modules/angular/angular.min.js node_modules/angular-route/angular-route.min.js node_modules/angular-animate/angular-animate.min.js dist && cp index.html dist/index.html",
+"format": "npx prettier --write "**/*.{js,css,html,json,md}""
+},
+"devDependencies": {
+"http-server": "^14.1.1",
+"prettier": "^3.3.3"
+}
+}
+
+Note: If you prefer a super‑light setup without npm, you can link AngularJS via CDN in index.html and just open with any static server.
+
+Example CDN snippet (index.html head)
+<!-- AngularJS 1.8 + ngRoute + optional ngAnimate --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-animate.min.js"></script>
+GitHub Pages deploy steps
+Create repo and push code.
+
+In repo Settings → Pages → Deploy from branch → main → root.
+
+Or add a workflow: .github/workflows/pages.yml that builds and publishes the static site to gh-pages. A minimal workflow:
+
+name: deploy-pages
+on:
+push:
+branches: [ "main" ]
+permissions:
+contents: read
+pages: write
+id-token: write
+jobs:
+deploy:
+environment:
+name: github-pages
+url: ${{ steps.deployment.outputs.page_url }}
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- uses: actions/configure-pages@v5
+- uses: actions/upload-pages-artifact@v3
+with:
+path: .
+- uses: actions/deploy-pages@v4
+id: deployment
+
+Perplexity MCP usage hint
+If generation gets stuck or you want to auto‑scaffold folders/files, instruct the assistant to:
+
+Create files listed above with boilerplate AngularJS code.
+
+Implement NotesService using localStorage with a “notes” key.
+
+Add seedDemo() in run block if no notes exist.
+
+Optional Python requirements.txt
+Only needed if you host with a tiny Python static server or want pre‑commit tooling; for a pure AngularJS static app you don’t need this file.
+
+requirements.txt:
+
+Use one of these modes; pick A for simplest local serving.
+
+A) Simple local server:
+
+No dependencies required; use Python 3’s built‑in http.server module.
+
+B) Tiny Flask server (if you insist):
+Flask==3.0.3
+gunicorn==22.0.0
+waitress==3.0.0
+
+C) Tooling bundle (optional):
+black==24.8.0
+flake8==7.1.1
+
+Recommendation: skip Python entirely and deploy as static files via GitHub Pages.
+
+README checklist (include in your repo)
+Overview + screenshots
+
+Tech stack and folder structure
+
+Setup:
+
+npm install
+
+npm run start
+
+Build/deploy:
+
+GitHub Pages or any static host instructions
+
+Usage:
+
+Keyboard shortcuts (n, /, Esc)
+
+Theme toggle
+
+Reset storage
+
+Roadmap:
+
+Drag to reorder
+
+Import/export JSON
+
+Reminders and due dates

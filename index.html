@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="notesApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes Micro App</title>
+  <!-- AngularJS + Dependencies -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-animate.min.js"></script>
+  <!-- Application Scripts -->
+  <script src="app.module.js"></script>
+  <script src="app.routes.js"></script>
+  <script src="services/notes.service.js"></script>
+  <script src="controllers/notes.controller.js"></script>
+  <script src="components/note-card.directive.js"></script>
+  <script src="components/note-editor.controller.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body ng-class="{'dark-theme': isDarkTheme}" ng-controller="AppController">
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="search-bar">
+        <input type="text" ng-model="searchQuery" placeholder="Search notes..." ng-model-options="{ debounce: 150 }">
+      </div>
+      <div class="actions">
+        <select ng-model="sortOption">
+          <option value="updatedAt">Updated</option>
+          <option value="createdAt">Created</option>
+          <option value="title">Title</option>
+        </select>
+        <button ng-click="toggleTheme()" class="theme-toggle">Toggle Theme</button>
+        <button ng-click="createNote()" class="new-note">New Note</button>
+      </div>
+    </header>
+    <main ng-view class="main-content"></main>
+  </div>
+</body>
+</html>
